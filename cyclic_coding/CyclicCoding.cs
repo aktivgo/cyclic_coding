@@ -5,11 +5,35 @@ namespace cyclic_coding
 {
     public static class CyclicCoding
     {
+        public static List<int> MultiplyPolynomials(List<int> multiplier1, List<int> multiplier2)
+        {
+            List<int> result = new List<int>();
+            for (int i = 0; i < multiplier1.Count + multiplier2.Count - 1; i++)
+            {
+                result.Add(0);
+            }
+
+            for (int i = 0; i < multiplier1.Count; i++)
+            {
+                for (int j = 0; j < multiplier2.Count; j++)
+                {
+                    result[i + j] += multiplier1[i] * multiplier2[j];
+                }
+            }
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                result[i] %= 2;
+            }
+
+            return result;
+        }
+
         public static KeyValuePair<List<List<int>>, List<int>> DividePolynomials(List<int> divisible, List<int> divider)
         {
             Stringify(divisible);
             Stringify(divider);
-            
+
             if (IsPolynomialLess(divisible, divider))
             {
                 throw new ArgumentException("Делитель должен быть меньше делимого");
@@ -28,10 +52,11 @@ namespace cyclic_coding
                 {
                     newDivisible[i] += (k * divider[i]) % 2;
                 }
+
                 Stringify(newDivisible);
                 tailings.Add(newDivisible);
             }
-            
+
             return new KeyValuePair<List<List<int>>, List<int>>(tailings, result);
         }
 
@@ -41,7 +66,7 @@ namespace cyclic_coding
             {
                 return true;
             }
-            
+
             // 1000 1011
             if (p1.Count == p2.Count)
             {
@@ -57,7 +82,7 @@ namespace cyclic_coding
             return false;
         }
 
-        public static void Stringify(List<int> p)
+        private static void Stringify(List<int> p)
         {
             while (p[0] == 0)
             {
