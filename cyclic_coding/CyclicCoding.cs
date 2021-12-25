@@ -26,6 +26,7 @@ namespace cyclic_coding
                 result[i] %= 2;
             }
 
+            Stringify(result);
             return result;
         }
 
@@ -43,18 +44,26 @@ namespace cyclic_coding
             List<List<int>> tailings = new List<List<int>>();
             List<int> newDivisible = new List<int>(divisible);
 
-            // 1000/1010
-            while (!IsPolynomialLess(divider, newDivisible))
+            // 10000/1011
+            while (!IsPolynomialLess(newDivisible, divider))
             {
                 int k = newDivisible[0] / divider[0];
                 result.Add(k);
-                for (int i = divider.Count - 1; i >= 0; i--)
+                if (k > 0)
                 {
-                    newDivisible[i] += (k * divider[i]) % 2;
-                }
+                    for (int i = divider.Count - 1; i >= 0; i--)
+                    {
+                        newDivisible[i] += k * divider[i];
+                        newDivisible[i] %= 2;
+                    }
 
-                Stringify(newDivisible);
-                tailings.Add(newDivisible);
+                    Stringify(newDivisible);
+                    tailings.Add(newDivisible);
+                }
+                else
+                {
+                    newDivisible.Add(0);
+                }
             }
 
             return new KeyValuePair<List<List<int>>, List<int>>(tailings, result);
@@ -79,12 +88,13 @@ namespace cyclic_coding
                 }
             }
 
+            // 10000 1011
             return false;
         }
 
         private static void Stringify(List<int> p)
         {
-            while (p[0] == 0)
+            while (p[0] == 0 && p.Count > 1)
             {
                 p.RemoveAt(0);
             }
