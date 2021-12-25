@@ -26,15 +26,24 @@ namespace cyclic_coding
                 result[i] %= 2;
             }
 
-            Stringify(result);
+            return result;
+        }
+
+        public static List<int> GenerateRandomBinarySequence(int length)
+        {
+            Random random = new Random();
+            List<int> result = new List<int>();
+            
+            for (int i = 0; i < length; i++)
+            {
+                result.Add(random.Next(0, 2));
+            }
+
             return result;
         }
 
         public static KeyValuePair<List<List<int>>, List<int>> DividePolynomials(List<int> divisible, List<int> divider)
         {
-            Stringify(divisible);
-            Stringify(divider);
-
             if (IsPolynomialLess(divisible, divider))
             {
                 throw new ArgumentException("Делитель должен быть меньше делимого");
@@ -57,7 +66,6 @@ namespace cyclic_coding
                         newDivisible[i] %= 2;
                     }
 
-                    Stringify(newDivisible);
                     tailings.Add(newDivisible);
                 }
                 else
@@ -71,33 +79,7 @@ namespace cyclic_coding
 
         private static bool IsPolynomialLess(List<int> p1, List<int> p2)
         {
-            if (p1.Count < p2.Count)
-            {
-                return true;
-            }
-
-            // 1000 1011
-            if (p1.Count == p2.Count)
-            {
-                for (int i = 0; i < p1.Count; i++)
-                {
-                    if (p1[i] < p2[i])
-                    {
-                        return true;
-                    }
-                }
-            }
-
-            // 10000 1011
-            return false;
-        }
-
-        private static void Stringify(List<int> p)
-        {
-            while (p[0] == 0 && p.Count > 1)
-            {
-                p.RemoveAt(0);
-            }
+            return p1.Count < p2.Count;
         }
     }
 }

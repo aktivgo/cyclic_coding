@@ -8,42 +8,46 @@ namespace cyclic_coding
     {
         public static void Main(string[] args)
         {
-            while (true)
+            List<int> gPolynomial = ReadPolynomial("Введите генераторный многочлен: ");
+            Console.WriteLine("1 - Ввести входную последовательность\n2 - Сгенерировать входную последовательность");
+            int ch = int.Parse(Console.ReadLine() ?? string.Empty);
+            List<int> polynomial = new List<int>();
+            switch (ch)
             {
-                PrintMenu();
-                Console.Write("\nВыберите пункт меню: ");
-                string ch = Console.ReadLine();
-
-                switch (ch)
+                case 1:
                 {
-                    case "0": return;
-                    case "1":
-                    {
-                        List<int> p1 = ReadPolynomial("\nВведите первый полином: ");
-                        List<int> p2 = ReadPolynomial("Введите второй полином: ");
-                        List<int> result = CyclicCoding.MultiplyPolynomials(p1, p2);
-                        PrintResult(result);
-                    }
-                        break;
-                    case "2":
-                    {
-                        List<int> p1 = ReadPolynomial("\nВведите первый полином: ");
-                        List<int> p2 = ReadPolynomial("Введите второй полином: ");
-                        KeyValuePair<List<List<int>>, List<int>> result = CyclicCoding.DividePolynomials(p1, p2);
-                        PrintResult(result);
-                    }
-                        break;
-                    case "3":
-                    {
-                    }
-                        break;
-                    default:
-                    {
-                        Console.WriteLine("Ошибка ввода: попробуйте ещё раз");
-                    }
-                        break;
+                    polynomial = ReadPolynomial("\nВведите входную последовательность: ");
+                    
                 }
+                    break;
+                case 2:
+                {
+                    Console.Write("Введите длину: ");
+                    int length = int.Parse(Console.ReadLine() ?? string.Empty);
+                    polynomial = CyclicCoding.GenerateRandomBinarySequence(length);
+                    
+                    Console.WriteLine("\nСгенерированная последовательность: ");
+                    foreach (var item in polynomial)
+                    {
+                        Console.Write(item);
+                    }
+                    Console.WriteLine("\nСтепень: " + (polynomial.Count - 1));
+                }
+                    break;
+                default:
+                {
+                    Console.WriteLine("Ошибка ввода\n");
+                }
+                    break;
             }
+            
+            List<int> result = CyclicCoding.MultiplyPolynomials(polynomial, gPolynomial);
+            Console.WriteLine("\nЦиклический код: ");
+            foreach (var item in result)
+            {
+                Console.Write(item);
+            }
+            Console.WriteLine("\nСтепень: " + (result.Count - 1));
         }
 
         private static List<int> ReadPolynomial(string message)
@@ -58,44 +62,6 @@ namespace cyclic_coding
             }
 
             return p;
-        }
-
-        private static void PrintMenu()
-        {
-            Console.WriteLine("1. Умножение полиномов");
-            Console.WriteLine("2. Деление полиномов");
-            Console.WriteLine("3. Вычисление циклического кода");
-            Console.WriteLine("0. Выход");
-        }
-
-        private static void PrintResult(List<int> result)
-        {
-            Console.Write("\nРезультат: ");
-            foreach (var item in result)
-            {
-                Console.Write(item);
-            }
-            Console.WriteLine("\n");
-        }
-        
-        private static void PrintResult(KeyValuePair<List<List<int>>, List<int>> result)
-        {
-            Console.Write("\nРезультат: ");
-            foreach (var item in result.Value)
-            {
-                Console.Write(item);
-            }
-            Console.Write("\nОстатки от деления: ");
-            foreach (var item in result.Key)
-            {
-                foreach (var num in item)
-                {
-                    Console.Write(num);
-                }
-                Console.Write(" ");
-            }
-            
-            Console.WriteLine("\n");
         }
     }
 }
