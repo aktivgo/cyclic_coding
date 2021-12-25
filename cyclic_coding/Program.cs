@@ -8,6 +8,15 @@ namespace cyclic_coding
     {
         public static void Main(string[] args)
         {
+            /*List<int> gPolynomial = ReadPolynomial("Введите генераторный многочлен: ");
+            List<int> polynomial = ReadPolynomial("\nВведите входную последовательность: ");
+            
+            List<int> result = CyclicCoding.DividePolynomials(polynomial, gPolynomial);
+            foreach (var item in result)
+            {
+                Console.Write(item);
+            }*/
+            
             List<int> gPolynomial = ReadPolynomial("Введите генераторный многочлен: ");
             Console.WriteLine("1 - Ввести входную последовательность\n2 - Сгенерировать входную последовательность");
             int ch = int.Parse(Console.ReadLine() ?? string.Empty);
@@ -17,7 +26,6 @@ namespace cyclic_coding
                 case 1:
                 {
                     polynomial = ReadPolynomial("\nВведите входную последовательность: ");
-                    
                 }
                     break;
                 case 2:
@@ -48,6 +56,14 @@ namespace cyclic_coding
                 Console.Write(item);
             }
             Console.WriteLine("\nСтепень: " + (result.Count - 1));
+
+            List<int> check = CyclicCoding.DividePolynomials(result, gPolynomial);
+            Console.Write("\nПроверка(s(x) mod g(x)): ");
+            foreach (var item in check)
+            {
+                Console.Write(item);
+            }
+            Console.WriteLine("\n" + (check.Count == 1 && check[0] == 0 ? "true" : "false"));
         }
 
         private static List<int> ReadPolynomial(string message)

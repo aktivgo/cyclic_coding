@@ -42,44 +42,30 @@ namespace cyclic_coding
             return result;
         }
 
-        public static KeyValuePair<List<List<int>>, List<int>> DividePolynomials(List<int> divisible, List<int> divider)
+        public static List<int> DividePolynomials(List<int> divisible, List<int> divider)
         {
-            if (IsPolynomialLess(divisible, divider))
-            {
-                throw new ArgumentException("Делитель должен быть меньше делимого");
-            }
-
-            List<int> result = new List<int>();
-            List<List<int>> tailings = new List<List<int>>();
             List<int> newDivisible = new List<int>(divisible);
-
-            // 10000/1011
-            while (!IsPolynomialLess(newDivisible, divider))
+            
+            while (newDivisible.Count >= divider.Count)
             {
-                int k = newDivisible[0] / divider[0];
-                result.Add(k);
-                if (k > 0)
+                for (int i = 0; i < divider.Count; i++)
                 {
-                    for (int i = divider.Count - 1; i >= 0; i--)
-                    {
-                        newDivisible[i] += k * divider[i];
-                        newDivisible[i] %= 2;
-                    }
-
-                    tailings.Add(newDivisible);
+                    newDivisible[i] += divider[i];
+                    newDivisible[i] %= 2;
                 }
-                else
-                {
-                    newDivisible.Add(0);
-                }
+                Stringify(newDivisible);
             }
-
-            return new KeyValuePair<List<List<int>>, List<int>>(tailings, result);
+            
+            Stringify(newDivisible);
+            return newDivisible;
         }
-
-        private static bool IsPolynomialLess(List<int> p1, List<int> p2)
+        
+        private static void Stringify(List<int> p)
         {
-            return p1.Count < p2.Count;
+            while (p[0] == 0 && p.Count > 1)
+            {
+                p.RemoveAt(0);
+            }
         }
     }
 }
